@@ -5,6 +5,7 @@ dotenv.config({ path: "./.env" });
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authentication");
 const imageRoutes = require("./routes/images")
+const postRoutes = require('./routes/userPost')
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,9 @@ app.use("/images", imageRoutes);
 
 // middleware for all routes for auth
 app.use("/user", authRoutes);
+
+// middleware for all routes for post
+app.use("/post", postRoutes);
 
 
 app.listen(port, () => {

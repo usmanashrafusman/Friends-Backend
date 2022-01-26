@@ -80,6 +80,7 @@ router.post(
     body("email", "Enter a valid email").isEmail(),
   ],
   async (req, res) => {
+    console.log("Login Api Triggered");
     let success = false;
     //if any error occur show error
     const errors = validationResult(req);
@@ -132,7 +133,7 @@ router.post(
   }
 );
 
-// verifying user token & getting logged in user data
+//Route 3 : verifying user token & getting user data : Login Required
 router.get("/getuser", authenticate, (req, res) => {
   res.send(req.user);
 });

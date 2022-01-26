@@ -7,11 +7,9 @@ dotenv.config({path: "./.env"});
 // Conneting To Mongo
 
 const conn = mongoose.createConnection(process.env.MONGOURI)
-// const connetToMongo = () => {
-//     mongoose.connect(process.env.MONGOURI, () => {
-//       console.log("Connected To Mongo Sucessfully");
-//     });
-//   };
-
+const connetToMongo = () => {
+ mongoose.connect(process.env.MONGOURI, () => {console.log("Connected To Mongo Sucessfully");});
+};
+connetToMongo();
 //export connetToMongo function
 module.exports = conn;

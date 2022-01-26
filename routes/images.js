@@ -24,6 +24,7 @@ router.get("/:id", (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(404).send("No Image Found")
   }
 });
 
