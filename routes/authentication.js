@@ -1,11 +1,16 @@
 const express = require("express");
 const User = require("../models/User");
+const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const upload = require("../middlewares/uploadImage");
 const authenticate = require("../middlewares/authenticate");
 const router = express.Router();
+
+//placeholder images ref in DB for user's with no profile pic
+const maleDemoImg = "61f1707f7f9961fbe9dace14";
+const femaleDemoImg = "61f170c57f9961fbe9dace16";
 
 //Route : 1 Create a user using POST : No Login Required
 router.post(
@@ -47,7 +52,11 @@ router.post(
         email: req.body.email,
         password,
         gender: req.body.gender,
-        image: req.file.id,
+        image: req.file
+          ? req.file.id
+          : req.body.gender === "male"
+          ? maleDemoImg
+          : femaleDemoImg,
       });
 
       const data = {
@@ -55,16 +64,17 @@ router.post(
           id: user.id,
         },
       };
-      //generating auth token
+      //generating auth token thorught method we created in schema
       const authtoken = await user.getAuthToken();
       success = true;
-      //sending token to browser setHeader
+      //sending token to browser
       res.cookie("token", authtoken, {
         httpOnly: true,
       });
       //sending respond
       res.json({ success, authtoken });
-    } catch (e) {
+    } catch (error) {
+      console.log(error)
       res.status(500).send(e.message);
     }
   }
@@ -80,7 +90,6 @@ router.post(
     body("email", "Enter a valid email").isEmail(),
   ],
   async (req, res) => {
-    console.log("Login Api Triggered");
     let success = false;
     //if any error occur show error
     const errors = validationResult(req);
@@ -127,7 +136,8 @@ router.post(
       });
 
       res.json({ success, authtoken });
-    } catch (e) {
+    } catch (error) {
+      console.log(error)
       res.status(500).send(e.message);
     }
   }
@@ -136,6 +146,18 @@ router.post(
 //Route 3 : verifying user token & getting user data : Login Required
 router.get("/getuser", authenticate, (req, res) => {
   res.send(req.user);
+});
+
+//Route 4 : get any user : Login Required
+router.get("/getuserdata/:id", async (req, res) => {
+  try {
+    const _id = await mongoose.Types.ObjectId(req.params.id);
+    const user = await User.findById(_id);
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.send(500).send(error);
+  }
 });
 
 module.exports = router;

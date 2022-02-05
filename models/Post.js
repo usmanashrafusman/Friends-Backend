@@ -18,6 +18,25 @@ const PostSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  likes: {
+    type: Array,
+    default: [],
+  },
+  comments: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+      comment: {
+        type: String,
+      },
+      timestamp: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 const Post = mongoose.model("posts", PostSchema);

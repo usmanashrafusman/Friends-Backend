@@ -6,25 +6,25 @@ const conn = require("../db");
 let gfs;
 
 //initilizing gfs
-conn.once("open", async() => {
-  gfs = await new mongoose.mongo.GridFSBucket(conn.db, {
+conn.once("open", () => {
+  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
     bucketName: "uploads",
   });
-  console.log("Connected Once");
+  console.log("Sever Is Ready");
 });
 
 //retriving image from DB
-router.get("/:id", (req, res) => {
+router.get("/:id", async(req, res) => {
   try {
     const { id } = req.params;
     const _id = mongoose.Types.ObjectId(id);
-    gfs.find({ _id }).toArray((err, file) => {
+    gfs.find({_id}).toArray((err, file) => {
       const readstream = gfs.openDownloadStream(file[0]._id);
       readstream.pipe(res);
     });
   } catch (error) {
     console.log(error);
-    res.status(404).send("No Image Found")
+    res.status(404).send("No Image Found");
   }
 });
 

@@ -1,6 +1,5 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const cors = require("cors");
 dotenv.config({ path: "./.env" });
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authentication");
@@ -8,7 +7,7 @@ const imageRoutes = require("./routes/images")
 const postRoutes = require('./routes/userPost')
 
 const app = express();
-app.use(cors());
+
 const port = process.env.PORT;
 
 //middleware for browser cookie
