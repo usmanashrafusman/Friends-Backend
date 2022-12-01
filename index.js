@@ -16,6 +16,14 @@ app.use(cookieParser());
 //middleware to get req JSON
 app.use(express.json());
 
+app.get("/" , (req,res)=>{
+  res.send("Hello From Friends Server");
+});
+
+app.get("/home" , (req,res)=>{
+  res.send("Hello From Friends Server Home");
+});
+
 // middleware for all routes for images
 app.use("/images", imageRoutes);
 
