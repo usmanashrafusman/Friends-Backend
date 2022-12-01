@@ -16,6 +16,12 @@ app.use(cookieParser());
 //middleware to get req JSON
 app.use(express.json());
 
+//LOGS Middleware
+app.use((req,res,next)=>{
+  console.log(req.url);
+  next();
+});
+
 app.get("/" , (req,res)=>{
   res.send("Hello From Friends Server");
 });
