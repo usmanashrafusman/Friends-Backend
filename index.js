@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./.env" });
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authentication");
+const conn = require("./db.js");
 const imageRoutes = require("./routes/images")
 const postRoutes = require('./routes/userPost')
 
